@@ -1731,7 +1731,7 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
 <!-- ══ 라이트박스 ══ -->
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="이미지 확대 보기">
   <button class="lb-x" id="lbX" type="button" aria-label="닫기">✕</button>
-  <img id="lbImg" src="" alt="">
+  <img id="lbImg" alt="">
 </div>
 
 <script>
@@ -1916,7 +1916,7 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
     $('#lbX').focus();
   }
   function closeLb(){
-    lb.classList.remove('open'); lbImg.src = ''; lbImg.classList.remove('tall');
+    lb.classList.remove('open'); lbImg.removeAttribute('src'); lbImg.classList.remove('tall');
     document.body.style.overflow = '';
     if (lastFocus) lastFocus.focus();
   }
