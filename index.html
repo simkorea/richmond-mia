@@ -598,7 +598,9 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
   background:rgba(6,11,22,.82);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);padding:18px 12px}
 .pw.on{display:flex;animation:pwF .3s ease both}
 @keyframes pwF{from{opacity:0}to{opacity:1}}
-.pw-in{width:100%;max-width:430px;max-height:calc(100dvh - 36px);overflow-y:auto;
+.pw-deck{display:flex;gap:14px;align-items:flex-start;justify-content:center;flex-wrap:wrap;
+  width:100%;max-height:calc(100dvh - 36px);overflow-y:auto;padding:2px}
+.pw-in{flex:0 1 430px;width:100%;max-width:430px;
   background:var(--ink);border-radius:18px;padding:8px;
   box-shadow:0 34px 80px -26px rgba(0,0,0,.7);
   animation:pwU .4s cubic-bezier(.2,.8,.3,1) both}
@@ -621,6 +623,9 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
   font-size:14.5px;font-weight:800;color:var(--ink);letter-spacing:-.03em}
 .pw-tip svg{flex:0 0 18px}
 .pw-btns{margin-top:11px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pw-body-img{padding:8px}
+.pw-body-img img{width:100%;border-radius:10px;display:block}
+.pw-apply{width:100%;margin-top:10px}
 .pw-b{display:flex;align-items:center;justify-content:center;gap:7px;padding:14px 8px;border-radius:11px;
   border:1px solid transparent;cursor:pointer;font-size:14.5px;font-weight:800;letter-spacing:-.03em;
   text-decoration:none;font-family:'Pretendard Variable',Pretendard,sans-serif;
@@ -2019,7 +2024,8 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
 
 <!-- ══ 첫 화면 팝업 ══ -->
 <div class="pw" id="pw" role="dialog" aria-modal="true" aria-labelledby="pwH" hidden>
-  <div class="pw-in" id="pwIn" tabindex="-1">
+ <div class="pw-deck" id="pwDeck" tabindex="-1">
+  <div class="pw-in" id="pwIn">
     <div class="pw-body">
       <button class="pw-x" type="button" id="pwX" aria-label="팝업 닫기">&#10005;</button>
       <p class="pw-eb">The Richmond Mia</p>
@@ -2048,13 +2054,24 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
       </div>
     </div>
   </div>
+
+  <div class="pw-in">
+    <div class="pw-body pw-body-img">
+      <button class="pw-x" type="button" id="pwX2" aria-label="팝업 닫기">&#10005;</button>
+      <img src="./images/rm/promo-popup.jpg"
+           alt="더 리치먼드 미아 본사 직영 특별 프로모션 — 청약 완료 고객 및 선착순 대기 고객 한정, 사전등록 시 단독 적용"
+           width="470" height="587">
+      <button class="pw-b pw-b2 pw-apply" type="button" id="pwApply">신청하기</button>
+    </div>
+  </div>
+ </div>
 </div>
 
 <script>
 (function(){
   var KEY='richmond_popup_hide_until', pw=document.getElementById('pw');
   if(!pw) return;
-  var box=document.getElementById('pwIn'), last=null;
+  var box=document.getElementById('pwDeck'), last=null;
 
   function hidden(){ try{ return Date.now() < (parseInt(localStorage.getItem(KEY),10)||0); }catch(e){ return false; } }
   function open(){
@@ -2077,13 +2094,16 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
   document.addEventListener('keydown', function(e){
     if(e.key==='Escape' && pw.classList.contains('on')) close();
   });
+  document.getElementById('pwX2').addEventListener('click', close);
   document.getElementById('pwTel').addEventListener('click', function(){ setTimeout(close,60); });
-  document.getElementById('pwBook').addEventListener('click', function(){
+  function goBook(){
     close();
     if(window.__goPage) window.__goPage('p-contact');
     var el=document.getElementById('p-contact');
     if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
-  });
+  }
+  document.getElementById('pwBook').addEventListener('click', goBook);
+  document.getElementById('pwApply').addEventListener('click', goBook);
 
   /* 포커스를 팝업 안에 가둔다 */
   box.addEventListener('keydown', function(e){
