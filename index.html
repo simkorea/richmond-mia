@@ -329,7 +329,7 @@ address{font-style:normal}
 .vid-shot{display:block;position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--ink)}
 .vid img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease),opacity .4s var(--ease);opacity:.9}
 .vid:hover img{transform:scale(1.04);opacity:1}
-.vid figcaption{margin-top:14px;color:var(--text);font-size:14.5px;font-weight:600;letter-spacing:-.025em;line-height:1.5;text-align:center}
+.vid .vid-cap{display:block;margin-top:14px;color:var(--text);font-size:14.5px;font-weight:600;letter-spacing:-.025em;line-height:1.5;text-align:center}
 .vid-play{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
   width:64px;height:64px;border:1px solid rgba(255,255,255,.7);border-radius:50%;
@@ -368,7 +368,7 @@ address{font-style:normal}
 .prem:hover .prem-body .prem-idx{color:var(--gold)}
 
 /* ══════════ 10. 입지 ══════════ */
-.map-frame{position:relative;background:#fff;border:1px solid var(--rule);padding:clamp(10px,2vw,22px);cursor:zoom-in}
+.map-frame{position:relative;display:block;width:100%;text-align:left;font:inherit;color:inherit;background:#fff;border:1px solid var(--rule);padding:clamp(10px,2vw,22px);cursor:zoom-in}
 .map-frame img{width:100%}
 .map-frame .zoom{
   position:absolute;right:14px;top:14px;background:rgba(12,22,47,.86);color:#fff;
@@ -525,6 +525,11 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
 .mbar .m-book:active{background:var(--gold-hi)}
 
 /* ══════════ 16. 라이트박스 ══════════ */
+[data-lb]{position:relative}
+.lb-hit{
+  position:absolute;inset:0;z-index:2;display:block;width:100%;
+  margin:0;padding:0;border:0;background:none;cursor:zoom-in;
+}
 .lb{position:fixed;inset:0;z-index:200;background:rgba(7,13,26,.95);display:none;align-items:center;justify-content:center;padding:20px;overscroll-behavior:contain;overflow:auto}
 .lb.open{display:flex}
 .lb img{max-width:100%;max-height:92vh;object-fit:contain}
@@ -901,13 +906,13 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
         <h2 id="h-video">단지를 먼저<br>영상으로 만나보세요</h2>
         <p>더 리치먼드 미아 공식 브랜드 영상입니다. 클릭하면 유튜브에서 바로 재생됩니다.</p>
       </div>
-      <figure class="vid reveal" role="button" tabindex="0" data-yt="7Hx2-A8d7zM" aria-label="영상 재생: 30초 역세권 더 리치먼드 미아">
+      <button type="button" class="vid reveal" data-yt="7Hx2-A8d7zM">
         <span class="vid-shot">
           <img src="./images/rm/yt-brand.jpg" alt="더 리치먼드 미아 브랜드 영상 — 30초 역세권" loading="lazy" width="1280" height="720">
           <span class="vid-play" aria-hidden="true"></span>
         </span>
-        <figcaption>30초 역세권, 더 리치먼드 미아</figcaption>
-      </figure>
+        <span class="vid-cap">30초 역세권, 더 리치먼드 미아</span>
+      </button>
     </div>
   </section>
 </div>
@@ -1031,10 +1036,10 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
         <p>더 리치먼드 미아는 우이신설선 삼양사거리역과 단 30초 거리의 초역세권 입지로, 서울 전역을 빠르게 연결하는 교통 네트워크를 갖추고 있습니다. 풍부한 생활 인프라, 쾌적한 자연환경, 우수한 교육 여건까지 모두를 품었습니다.</p>
       </div>
 
-      <figure class="map-frame reveal" data-lb="./images/rm/loc-map.jpg" role="button" tabindex="0" aria-label="입지환경도 크게 보기">
+      <button type="button" class="map-frame reveal" data-lb="./images/rm/loc-map.jpg">
         <img src="./images/rm/loc-map.jpg" alt="더 리치먼드 미아 입지환경도 — 삼양사거리역, 미아사거리 상권, 북한산, 북서울 꿈의숲, 주변 학군 표시" loading="lazy" width="1600" height="1300">
-        <figcaption class="zoom">클릭하면 크게 보입니다</figcaption>
-      </figure>
+        <span class="zoom">클릭하면 크게 보입니다</span>
+      </button>
 
       <div class="loc-grid">
         <article class="loc-card reveal">
@@ -1898,16 +1903,13 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
     fig.dataset.played = '1';
     var f = document.createElement('iframe');
     f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
-    f.title = fig.getAttribute('aria-label') || '홍보영상';
+    f.title = (fig.querySelector('.vid-cap') || {}).textContent || '홍보영상';
     f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
     f.allowFullscreen = true;
     (fig.querySelector('.vid-shot') || fig).appendChild(f);
   }
   $$('.vid').forEach(function(fig){
     fig.addEventListener('click', function(){ playVideo(fig); });
-    fig.addEventListener('keydown', function(e){
-      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); playVideo(fig); }
-    });
   });
 
   /* ── 라이트박스 ── */
@@ -1927,10 +1929,22 @@ input::placeholder,textarea::placeholder{color:#A7B0BD}
   }
   $$('[data-lb]').forEach(function(el){
     function fire(){ var img = el.querySelector('img'); openLb(el.dataset.lb, img ? img.alt : ''); }
-    el.addEventListener('click', fire);
-    el.addEventListener('keydown', function(e){
-      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); fire(); }
-    });
+    /* 이미 버튼 역할이면 그대로 — 버튼 안에 버튼을 넣을 수 없다 */
+    if (el.tagName === 'BUTTON' || el.getAttribute('role') === 'button'){
+      el.addEventListener('click', fire);
+      el.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); fire(); }
+      });
+      return;
+    }
+    /* 그 외에는 투명한 진짜 버튼을 덮어 키보드로도 열리게 한다 */
+    var img = el.querySelector('img');
+    var hit = document.createElement('button');
+    hit.type = 'button';
+    hit.className = 'lb-hit';
+    hit.setAttribute('aria-label', (img && img.alt ? img.alt : '이미지') + ' 크게 보기');
+    hit.addEventListener('click', fire);
+    el.appendChild(hit);
   });
   $$('.fin .more').forEach(function(b){
     b.addEventListener('click', function(){ openLb(b.dataset.open, b.parentNode.querySelector('img').alt); });
