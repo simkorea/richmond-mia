@@ -50,16 +50,16 @@ module.exports = async (req, res) => {
       body: JSON.stringify({
         from: 'onboarding@resend.dev',
         to: ['xinkorea@naver.com'],
-        subject: `[더 리치먼드 미아] 새 방문예약 — ${name}`,
+        subject: `[대우이안 시그니처원 미아] 새 방문예약 — ${name}`,
         html: `
           <div style="font-family:'Apple SD Gothic Neo',sans-serif;max-width:520px;margin:0 auto;">
             <h2 style="color:#0C162F;border-bottom:2px solid #C09C78;padding-bottom:10px;margin-bottom:16px;">
-              더 리치먼드 미아 · 새 방문예약이 접수되었습니다
+              대우이안 시그니처원 미아 · 새 방문예약이 접수되었습니다
             </h2>
             <table style="width:100%;border-collapse:collapse;">
               <tr>
                 <td style="padding:10px 14px;background:#F5F3F0;font-weight:700;width:30%;border:1px solid #E4E8EE;color:#0C162F;">현장</td>
-                <td style="padding:10px 14px;border:1px solid #E4E8EE;"><strong style="color:#8B6A4A;">더 리치먼드 미아</strong></td>
+                <td style="padding:10px 14px;border:1px solid #E4E8EE;"><strong style="color:#8B6A4A;">대우이안 시그니처원 미아</strong></td>
               </tr>
               <tr>
                 <td style="padding:10px 14px;background:#F5F3F0;font-weight:700;width:30%;border:1px solid #E4E8EE;color:#0C162F;">이름</td>
@@ -81,7 +81,7 @@ module.exports = async (req, res) => {
               </tr>
             </table>
             <p style="margin-top:20px;color:#98A0AC;font-size:12px;">
-              더 리치먼드 미아 분양 안내 ·
+              대우이안 시그니처원 미아 분양 안내 ·
               <a href="https://richmond-mia.vercel.app" style="color:#8B6A4A;">홈페이지 바로가기</a>
             </p>
           </div>
